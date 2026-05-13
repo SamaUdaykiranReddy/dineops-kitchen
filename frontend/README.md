@@ -1,70 +1,221 @@
-# Getting Started with Create React App
+# DineOps AI — Smart Restaurant Management System
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A full-stack, AI-powered restaurant POS system built with React, Node.js, MongoDB, and Docker. Deployed on AWS EC2.
 
-## Available Scripts
+🔴 **Live Demo:** http://3.91.216.209
 
-In the project directory, you can run:
+## Features
 
-### `npm start`
+- 🤖 **AI Assistant** — Real-time restaurant insights powered by Groq (LLaMA)
+- 📊 **Dashboard** — Live revenue charts, active orders, inventory alerts
+- 🍽️ **Orders** — Full lifecycle management (pending → preparing → ready → completed)
+- 👨‍🍳 **Kitchen Display** — Live timers, urgency alerts, order tracking
+- 🪑 **Tables** — Floor plan management, real-time status
+- 📅 **Reservations** — Booking management with auto no-show cancellation
+- 📋 **Menu** — Cart system, category filtering, order placement
+- 📦 **Inventory** — Stock tracking, low stock alerts, supplier management
+- 💳 **Payments** — Stripe card + cash payments via microservice
+- 👥 **Staff** — Roles, shifts, performance ratings
+- 👤 **Customers** — Loyalty points, visit history, VIP status
+- 📈 **Analytics** — Revenue charts, top items, order distribution
+- 📝 **Reports** — Daily sales, inventory, staff reports with CSV export
+- ⚙️ **Settings** — Business config, notifications, integrations
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Tech Stack
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+### Frontend
+- React.js
+- Tailwind CSS
+- Recharts
+- Stripe.js
 
-### `npm test`
+### Backend
+- Node.js + Express
+- MongoDB + Mongoose
+- Groq AI (LLaMA 3.1)
+- Helmet + CORS
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### Payments Microservice
+- Node.js + Express
+- Stripe API
+- MongoDB
 
-### `npm run build`
+### DevOps
+- Docker + Docker Compose
+- AWS EC2 (Ubuntu 22.04)
+- Nginx
+- MongoDB Atlas
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Architecture
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+```
+┌─────────────────┐     ┌──────────────────┐     ┌─────────────────────┐
+│  React Frontend  │────▶│  Express Backend  │────▶│   MongoDB Atlas     │
+│   (Nginx :80)   │     │  (Node.js :5004)  │     │   (Cloud Database)  │
+└─────────────────┘     └──────────────────┘     └─────────────────────┘
+                                │
+                         ┌──────▼──────────┐
+                         │ Payments Service │
+                         │ (Node.js :5007)  │
+                         └─────────────────┘
+```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Local Development
 
-### `npm run eject`
+### Prerequisites
+- Node.js 22+
+- MongoDB Atlas account
+- Stripe account
+- Groq API key
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+### Setup
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+```bash
+# Clone the repo
+git clone https://github.com/SamaUdaykiranReddy/dineops-kitchen.git
+cd dineops-kitchen
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+# Backend
+cd backend
+cp .env.example .env
+npm install
+npm start
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+# Payments service
+cd payments-service
+cp .env.example .env
+npm install
+npm start
 
-## Learn More
+# Frontend
+cd frontend
+cp .env.example .env
+npm install
+npm start
+```
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+### Environment Variables
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+**backend/.env**
+```
+MONGO_URI=your_mongodb_uri
+PORT=5004
+CLIENT_ORIGIN=http://localhost:3000
+GROQ_API_KEY=your_groq_key
+STRIPE_SECRET_KEY=your_stripe_secret
+STRIPE_WEBHOOK_SECRET=your_webhook_secret
+```
 
-### Code Splitting
+**payments-service/.env**
+```
+MONGO_URI=your_mongodb_uri
+PORT=5007
+STRIPE_SECRET_KEY=your_stripe_secret
+STRIPE_WEBHOOK_SECRET=your_webhook_secret
+ORDER_SERVICE_URL=http://localhost:5004
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+**frontend/.env**
+```
+REACT_APP_API_URL=http://localhost:5004
+REACT_APP_PAYMENT_URL=http://localhost:5007/payments
+REACT_APP_STRIPE_PUBLISHABLE_KEY=your_stripe_publishable_key
+```
 
-### Analyzing the Bundle Size
+## Docker Deployment
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+```bash
+# Build and run all services
+docker compose up --build -d
 
-### Making a Progressive Web App
+# Check status
+docker ps
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+# View logs
+docker logs dineops-backend
+docker logs dineops-payments
+docker logs dineops-frontend
+```
 
-### Advanced Configuration
+## Project Structure
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+```
+dineops-kitchen/
+├── frontend/                 # React application
+│   ├── src/
+│   │   ├── components/       # AIAssistant, Sidebar
+│   │   ├── pages/            # All 13 pages
+│   │   └── config.js         # API URLs
+│   ├── Dockerfile
+│   └── nginx.conf
+├── backend/                  # Main Express API
+│   ├── models/               # MongoDB schemas
+│   ├── routes/               # API routes
+│   ├── utils/                # Helper functions
+│   └── server.js
+├── payments-service/         # Stripe microservice
+│   ├── models/
+│   ├── routes/
+│   └── server.js
+└── docker-compose.yml
+```
 
-### Deployment
+## API Endpoints
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+### Orders
+```
+GET    /orders/recent
+GET    /orders/:id
+POST   /orders
+PUT    /orders/:id
+DELETE /orders/:id
+```
 
-### `npm run build` fails to minify
+### Inventory
+```
+GET    /inventory
+POST   /inventory
+PUT    /inventory/:id/stock
+DELETE /inventory/:id
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+### Reservations
+```
+GET    /reservations
+POST   /reservations
+PUT    /reservations/:id/status
+PUT    /reservations/:id/seat
+```
+
+### Staff
+```
+GET    /staff
+POST   /staff
+PUT    /staff/:id
+PUT    /staff/:id/performance
+DELETE /staff/:id
+```
+
+### Customers
+```
+GET    /customers
+POST   /customers
+PUT    /customers/:id
+POST   /customers/:id/visit
+DELETE /customers/:id
+```
+
+### Payments Microservice
+```
+POST   /payments/create-payment-intent
+POST   /payments/webhook
+GET    /payments
+GET    /payments/search
+```
+
+## Author
+Sama Udaykiran Reddy  
+[GitHub](https://github.com/SamaUdaykiranReddy) · [LinkedIn](https://linkedin.com/in/yourprofile)
+
+## License
+MIT
