@@ -2,17 +2,33 @@
   "name": "dineops-kitchen",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
   "scripts": {
-    "start": "concurrently \"npm run server\" \"npm run client\"",
-    "server": "cd backend && nodemon server.js",
-    "client": "cd frontend && npm start"
+    "kitchen": "cd backend && nodemon server.js",
+    "payment": "cd payments-service && nodemon server.js",
+    "client": "cd frontend && npm start",
+    "start": "concurrently \"npm run kitchen\" \"npm run payment\" \"npm run client\""
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
+    "cors": "^2.8.6",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "mongoose": "^9.2.1",
+    "nodemon": "^3.1.11",
+    "react-dom": "^19.2.4"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SamaUdaykiranReddy/dineops-kitchen.git"
+  },
+  "bugs": {
+    "url": "https://github.com/SamaUdaykiranReddy/dineops-kitchen/issues"
+  },
+  "homepage": "https://github.com/SamaUdaykiranReddy/dineops-kitchen#readme",
+  "devDependencies": {
     "concurrently": "^9.2.1"
   }
 }
